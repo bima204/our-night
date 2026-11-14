@@ -46,6 +46,43 @@
       overflow-x: hidden;
     }
 
+    /* Floating Music Control Button */
+    .music-control {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      z-index: 1000;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid var(--border);
+      border-radius: 50px;
+      padding: 6px 12px;
+      font-size: 12px;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(168, 88, 112, 0.12);
+      transition: all 0.25s ease;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .music-control.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .music-control.playing .disc-icon {
+      animation: spin 3.5s linear infinite;
+    }
+
+    @keyframes spin {
+      100% { transform: rotate(360deg); }
+    }
+
     /* =========================================
        LOCK / KEY OVERLAY SCREEN (INITIAL VIEW)
        ========================================= */
@@ -422,6 +459,17 @@
 </head>
 <body>
 
+  <!-- Background Calming Audio (Soft Piano Lo-Fi) -->
+  <audio id="bgAudio" loop preload="auto">
+    <source src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=tender-ambient-piano-112191.mp3" type="audio/mp3">
+  </audio>
+
+  <!-- Floating Audio Indicator Button -->
+  <div class="music-control" id="musicControl" onclick="toggleAudio()">
+    <span class="disc-icon">🎵</span>
+    <span id="musicText">Musik Aktif</span>
+  </div>
+
   <!-- =========================================
        LOCK & KEY OVERLAY (FIRST OPEN INTERACTION)
        ========================================= -->
@@ -542,7 +590,7 @@
       <div class="session-info">
         <div class="info-item">
           <span class="info-label">🌙 Waktu</span>
-          <span class="info-value">20.00 WIB s/d memeluk satu sama lain</span>
+          <span class="info-value">21.00 WIB s/d memeluk satu sama lain</span>
         </div>
         <div class="info-item">
           <span class="info-label">🕯️ Suasana</span>
@@ -570,6 +618,36 @@
 
   <script>
     /* =========================================
+       AUDIO BACKGROUND CONTROLLER
+       ========================================= */
+    const audio = document.getElementById('bgAudio');
+    const musicControl = document.getElementById('musicControl');
+    const musicText = document.getElementById('musicText');
+
+    function playCalmingAudio() {
+      audio.volume = 0.45; // Suara lembut / ambient volume
+      audio.play().then(() => {
+        musicControl.classList.add('visible', 'playing');
+        musicText.textContent = 'Musik';
+      }).catch((e) => {
+        // Jika browser memblokir autoplay sebelum user gesture
+        console.log('Autoplay prevented:', e);
+      });
+    }
+
+    function toggleAudio() {
+      if (audio.paused) {
+        audio.play();
+        musicControl.classList.add('playing');
+        musicText.textContent = 'Musik';
+      } else {
+        audio.pause();
+        musicControl.classList.remove('playing');
+        musicText.textContent = 'Jeda';
+      }
+    }
+
+    /* =========================================
        DRAG & DROP / TOUCH LOCK INTERACTION
        ========================================= */
     const key = document.getElementById('keyElement');
@@ -593,7 +671,6 @@
     window.addEventListener('touchmove', (e) => {
       if (!isDragging || isUnlocked) return;
       const deltaY = e.touches[0].clientY - startY;
-      // Hanya izinkan ditarik ke atas (arah gembok)
       if (deltaY < 0 && deltaY > -110) {
         currentY = deltaY;
         key.style.transform = `translateY(${deltaY}px)`;
@@ -651,7 +728,7 @@
       }
     });
 
-    // Also tap directly on key to auto-insert
+    // Tap directly on key to auto-insert
     key.addEventListener('click', () => {
       if (!isUnlocked && Math.abs(currentY) < 5) {
         unlockInvitation();
@@ -661,6 +738,9 @@
     function unlockInvitation() {
       if (isUnlocked) return;
       isUnlocked = true;
+
+      // Play soft calming audio right upon user interaction
+      playCalmingAudio();
 
       // Key animation insert
       key.classList.add('inserting');
