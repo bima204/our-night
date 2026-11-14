@@ -43,12 +43,178 @@
       color: var(--text-main);
       padding: 18px 14px;
       -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
     }
 
+    /* =========================================
+       LOCK / KEY OVERLAY SCREEN (INITIAL VIEW)
+       ========================================= */
+    #lockScreen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      height: 100dvh;
+      background: radial-gradient(circle at center, #fff2f5 0%, #f7e0e7 100%);
+      z-index: 999;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+      text-align: center;
+      transition: opacity 0.8s ease, transform 0.8s ease, visibility 0.8s;
+    }
+
+    #lockScreen.unlocked {
+      opacity: 0;
+      transform: scale(1.05);
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .lock-card-box {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      border-radius: 24px;
+      padding: 36px 26px 30px;
+      max-width: 360px;
+      width: 100%;
+      box-shadow: 0 16px 36px -10px rgba(168, 88, 112, 0.16);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .lock-badge {
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--primary);
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .lock-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 24px;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 6px;
+    }
+
+    .lock-instruction {
+      font-size: 13.5px;
+      color: var(--text-muted);
+      margin-bottom: 26px;
+      line-height: 1.5;
+    }
+
+    /* Lock & Key Stage Area */
+    .lock-stage {
+      position: relative;
+      width: 100%;
+      height: 190px;
+      background: #faf3f5;
+      border: 1.5px dashed #e6c8d1;
+      border-radius: 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px;
+      overflow: hidden;
+      user-select: none;
+    }
+
+    /* Padlock Element */
+    .padlock-target {
+      position: relative;
+      width: 72px;
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.3s ease;
+    }
+
+    .padlock-target.highlight {
+      transform: scale(1.1);
+    }
+
+    /* Padlock Shackle Animation */
+    .shackle {
+      transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+      transform-origin: 32px 30px;
+    }
+
+    .padlock-target.open .shackle {
+      transform: translateY(-8px) rotate(-28deg);
+    }
+
+    /* Draggable / Clickable Key */
+    .key-element {
+      width: 52px;
+      height: 52px;
+      cursor: grab;
+      touch-action: none;
+      position: relative;
+      transition: filter 0.2s ease;
+      filter: drop-shadow(0 4px 8px rgba(168, 88, 112, 0.25));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+    }
+
+    .key-element:active {
+      cursor: grabbing;
+      filter: drop-shadow(0 8px 14px rgba(168, 88, 112, 0.4));
+    }
+
+    .key-element.inserting {
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      transform: translate(0px, -70px) scale(0.65) rotate(90deg) !important;
+      opacity: 0;
+    }
+
+    .hint-drag {
+      font-size: 11.5px;
+      color: #9d878f;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .btn-quick-unlock {
+      margin-top: 14px;
+      background: none;
+      border: none;
+      color: var(--primary);
+      font-size: 12px;
+      text-decoration: underline;
+      cursor: pointer;
+      padding: 4px;
+    }
+
+    /* =========================================
+       MAIN INVITATION CARD
+       ========================================= */
     .card-wrapper {
       width: 100%;
       max-width: 440px;
       margin: auto;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.8s ease 0.3s, transform 0.8s ease 0.3s;
+    }
+
+    body.loaded .card-wrapper {
+      opacity: 1;
+      transform: translateY(0);
     }
 
     .invitation-card {
@@ -256,6 +422,54 @@
 </head>
 <body>
 
+  <!-- =========================================
+       LOCK & KEY OVERLAY (FIRST OPEN INTERACTION)
+       ========================================= -->
+  <div id="lockScreen">
+    <div class="lock-card-box">
+      <div class="lock-badge">Secret Invitation</div>
+      <h2 class="lock-title">Pesan Terkunci</h2>
+      <p class="lock-instruction">Tarik kunci ke gembok untuk membuka undangan ini 🤍</p>
+
+      <div class="lock-stage" id="lockStage">
+        <!-- Padlock SVG -->
+        <div class="padlock-target" id="padlockTarget">
+          <svg width="68" height="68" viewBox="0 0 68 68" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Shackle -->
+            <path class="shackle" d="M22 32V22C22 15.3726 27.3726 10 34 10C40.6274 10 46 15.3726 46 22V32" stroke="#a85870" stroke-width="5" stroke-linecap="round"/>
+            <!-- Body -->
+            <rect x="15" y="30" width="38" height="30" rx="8" fill="#f8d7e0" stroke="#a85870" stroke-width="2.5"/>
+            <!-- Keyhole -->
+            <circle cx="34" cy="42" r="3.5" fill="#a85870"/>
+            <path d="M32.5 44L31.5 51H36.5L35.5 44H32.5Z" fill="#a85870"/>
+          </svg>
+        </div>
+
+        <!-- Hint -->
+        <div class="hint-drag">Geser kunci ke atas ↑</div>
+
+        <!-- Draggable Golden/Rose Key SVG -->
+        <div class="key-element" id="keyElement">
+          <svg width="46" height="46" viewBox="0 0 46 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Key Ring / Bow with Heart center -->
+            <circle cx="23" cy="14" r="10" fill="#e898aa" stroke="#a85870" stroke-width="2"/>
+            <circle cx="23" cy="14" r="4.5" fill="#faf3f5"/>
+            <!-- Key Blade & Bit -->
+            <path d="M23 24V40" stroke="#a85870" stroke-width="3" stroke-linecap="round"/>
+            <path d="M23 34H28" stroke="#a85870" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M23 38H27" stroke="#a85870" stroke-width="2.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Fallback button if user just wants to tap -->
+      <button class="btn-quick-unlock" onclick="unlockInvitation()">atau ketuk di sini untuk buka langsung</button>
+    </div>
+  </div>
+
+  <!-- =========================================
+       MAIN INVITATION CARD
+       ========================================= -->
   <div class="card-wrapper">
     <div class="invitation-card">
 
@@ -355,6 +569,118 @@
   </div>
 
   <script>
+    /* =========================================
+       DRAG & DROP / TOUCH LOCK INTERACTION
+       ========================================= */
+    const key = document.getElementById('keyElement');
+    const lock = document.getElementById('padlockTarget');
+    const stage = document.getElementById('lockStage');
+    const lockScreen = document.getElementById('lockScreen');
+
+    let isDragging = false;
+    let startY = 0;
+    let currentY = 0;
+    let isUnlocked = false;
+
+    // Touch Events (Mobile Android / iOS)
+    key.addEventListener('touchstart', (e) => {
+      if (isUnlocked) return;
+      isDragging = true;
+      startY = e.touches[0].clientY;
+      key.style.transition = 'none';
+    }, { passive: true });
+
+    window.addEventListener('touchmove', (e) => {
+      if (!isDragging || isUnlocked) return;
+      const deltaY = e.touches[0].clientY - startY;
+      // Hanya izinkan ditarik ke atas (arah gembok)
+      if (deltaY < 0 && deltaY > -110) {
+        currentY = deltaY;
+        key.style.transform = `translateY(${deltaY}px)`;
+        if (deltaY < -65) {
+          lock.classList.add('highlight');
+        } else {
+          lock.classList.remove('highlight');
+        }
+      }
+    }, { passive: true });
+
+    window.addEventListener('touchend', () => {
+      if (!isDragging || isUnlocked) return;
+      isDragging = false;
+      if (currentY < -65) {
+        unlockInvitation();
+      } else {
+        key.style.transition = 'transform 0.3s ease';
+        key.style.transform = 'translateY(0px)';
+        lock.classList.remove('highlight');
+      }
+    });
+
+    // Mouse Events (Laptop / Desktop)
+    key.addEventListener('mousedown', (e) => {
+      if (isUnlocked) return;
+      isDragging = true;
+      startY = e.clientY;
+      key.style.transition = 'none';
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      if (!isDragging || isUnlocked) return;
+      const deltaY = e.clientY - startY;
+      if (deltaY < 0 && deltaY > -110) {
+        currentY = deltaY;
+        key.style.transform = `translateY(${deltaY}px)`;
+        if (deltaY < -65) {
+          lock.classList.add('highlight');
+        } else {
+          lock.classList.remove('highlight');
+        }
+      }
+    });
+
+    window.addEventListener('mouseup', () => {
+      if (!isDragging || isUnlocked) return;
+      isDragging = false;
+      if (currentY < -65) {
+        unlockInvitation();
+      } else {
+        key.style.transition = 'transform 0.3s ease';
+        key.style.transform = 'translateY(0px)';
+        lock.classList.remove('highlight');
+      }
+    });
+
+    // Also tap directly on key to auto-insert
+    key.addEventListener('click', () => {
+      if (!isUnlocked && Math.abs(currentY) < 5) {
+        unlockInvitation();
+      }
+    });
+
+    function unlockInvitation() {
+      if (isUnlocked) return;
+      isUnlocked = true;
+
+      // Key animation insert
+      key.classList.add('inserting');
+      lock.classList.add('highlight');
+
+      setTimeout(() => {
+        // Shackle pops open
+        lock.classList.add('open');
+      }, 350);
+
+      setTimeout(() => {
+        // Fade out screen & show invitation
+        lockScreen.classList.add('unlocked');
+        document.body.classList.add('loaded');
+      }, 750);
+    }
+
+    /* =========================================
+       BUTTON ACCEPT INTERACTION
+       ========================================= */
     function onAccept() {
       const btn = document.getElementById('acceptBtn');
       const toast = document.getElementById('toastMsg');
