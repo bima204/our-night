@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Untuk Dear Flowee</title>
+  <!-- Google Fonts: Cormorant Garamond & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg: #faf5f7;
+      --card-bg: #ffffff;
+      --primary: #a85870;
+      --primary-hover: #91455c;
+      --accent-soft: #fbf0f3;
+      --border: #eddde3;
+      --text-main: #2b2226;
+      --text-muted: #6e5e64;
+      --shadow: 0 16px 36px -10px rgba(168, 88, 112, 0.14);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: var(--bg);
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(248, 226, 233, 0.8) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(243, 218, 227, 0.7) 0px, transparent 50%);
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      color: var(--text-main);
+      padding: 18px 14px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .card-wrapper {
+      width: 100%;
+      max-width: 440px;
+      margin: auto;
+    }
+
+    .invitation-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      padding: 34px 22px 30px;
+      text-align: left;
+      position: relative;
+    }
+
+    @media (min-width: 480px) {
+      .invitation-card {
+        padding: 42px 32px 36px;
+      }
+    }
+
+    /* Elegant Bouquet Illustration Header */
+    .bouquet-container {
+      text-align: center;
+      margin-bottom: 18px;
+    }
+
+    .bouquet-svg {
+      width: 90px;
+      height: 90px;
+      display: inline-block;
+      filter: drop-shadow(0 6px 12px rgba(168, 88, 112, 0.15));
+      animation: gentleSway 4s ease-in-out infinite alternate;
+    }
+
+    @keyframes gentleSway {
+      0% { transform: rotate(-2deg); }
+      100% { transform: rotate(2deg); }
+    }
+
+    .subtitle-tag {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--primary);
+      margin-bottom: 8px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    h1.main-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(26px, 7vw, 32px);
+      font-weight: 600;
+      color: var(--text-main);
+      line-height: 1.22;
+      margin-bottom: 6px;
+      letter-spacing: -0.3px;
+    }
+
+    .recipient {
+      font-size: 15px;
+      color: var(--primary);
+      font-weight: 500;
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .divider {
+      width: 36px;
+      height: 1.5px;
+      background: var(--primary);
+      opacity: 0.35;
+      margin-bottom: 22px;
+    }
+
+    .letter-body {
+      font-size: clamp(13.8px, 3.8vw, 14.5px);
+      line-height: 1.8;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+    }
+
+    .letter-body p {
+      margin-bottom: 13px;
+    }
+
+    .letter-body p:last-child {
+      margin-bottom: 0;
+    }
+
+    /* Detail / Session Box */
+    .session-info {
+      background: var(--accent-soft);
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .info-item {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      border-bottom: 1px solid rgba(168, 88, 112, 0.12);
+      padding-bottom: 8px;
+    }
+
+    @media (min-width: 360px) {
+      .info-item {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 12px;
+      }
+    }
+
+    .info-item:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .info-label {
+      color: var(--text-muted);
+      font-size: 12.5px;
+      letter-spacing: 0.3px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    .info-value {
+      color: var(--text-main);
+      font-weight: 600;
+      font-size: 13.5px;
+      text-align: left;
+    }
+
+    @media (min-width: 360px) {
+      .info-value {
+        text-align: right;
+      }
+    }
+
+    /* Action Button */
+    .btn-warm {
+      background: var(--primary);
+      color: #ffffff;
+      border: none;
+      min-height: 50px;
+      padding: 13px 20px;
+      border-radius: 14px;
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.3px;
+      cursor: pointer;
+      transition: background-color 0.2s ease, transform 0.15s ease;
+      width: 100%;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 6px 16px rgba(168, 88, 112, 0.2);
+    }
+
+    .btn-warm:active {
+      transform: scale(0.98);
+      background: var(--primary-hover);
+    }
+
+    /* Response confirmation toast */
+    .toast-msg {
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      transition: all 0.35s ease;
+      font-size: 13.5px;
+      color: var(--primary);
+      text-align: center;
+      line-height: 1.5;
+    }
+
+    .toast-msg.show {
+      max-height: 90px;
+      opacity: 1;
+      margin-top: 14px;
+      padding: 12px 14px;
+      background: var(--accent-soft);
+      border-radius: 12px;
+    }
+
+    .footer-note {
+      margin-top: 24px;
+      font-size: 12px;
+      color: #9d8d93;
+      text-align: center;
+      letter-spacing: 0.5px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card-wrapper">
+    <div class="invitation-card">
+
+      <!-- Sweet Bouquet Illustration -->
+      <div class="bouquet-container">
+        <svg class="bouquet-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Flower Stems -->
+          <path d="M48 60L42 90" stroke="#7a9a7b" stroke-width="2.5" stroke-linecap="round"/>
+          <path d="M52 60L58 90" stroke="#7a9a7b" stroke-width="2.5" stroke-linecap="round"/>
+          <path d="M50 58L50 92" stroke="#688a69" stroke-width="3" stroke-linecap="round"/>
+          
+          <!-- Bouquet Wrap Paper -->
+          <path d="M30 64L40 92C40 92 50 90 60 92L70 64C70 64 50 56 30 64Z" fill="#edd5d0" stroke="#dab6b0" stroke-width="1.2"/>
+          <path d="M36 68L50 91L64 68" stroke="#ffffff" stroke-width="1" stroke-dasharray="2 2" fill="none"/>
+          <!-- Ribbon Bow -->
+          <circle cx="50" cy="78" r="4" fill="#a85870"/>
+          <path d="M47 78C42 75 40 82 46 82C49 82 50 78 50 78Z" fill="#a85870"/>
+          <path d="M53 78C58 75 60 82 54 82C51 82 50 78 50 78Z" fill="#a85870"/>
+          <path d="M48 81L43 89" stroke="#a85870" stroke-width="1.8" stroke-linecap="round"/>
+          <path d="M52 81L57 89" stroke="#a85870" stroke-width="1.8" stroke-linecap="round"/>
+
+          <!-- Leaves -->
+          <path d="M32 46C24 48 26 38 34 40C34 40 33 44 32 46Z" fill="#9db89e"/>
+          <path d="M68 46C76 48 74 38 66 40C66 40 67 44 68 46Z" fill="#9db89e"/>
+
+          <!-- Flower 1 (Left Rose - Soft Pink) -->
+          <circle cx="36" cy="40" r="11" fill="#f8b4c4"/>
+          <circle cx="36" cy="40" r="7" fill="#f29bb0"/>
+          <path d="M34 38C35 36 38 36 39 38C40 40 38 42 36 42" stroke="#e07d96" stroke-width="1.5" stroke-linecap="round"/>
+
+          <!-- Flower 2 (Right Rose - Peach Blush) -->
+          <circle cx="64" cy="40" r="11" fill="#fed0bb"/>
+          <circle cx="64" cy="40" r="7" fill="#fcae91"/>
+          <path d="M62 38C63 36 66 36 67 38C68 40 66 42 64 42" stroke="#e89174" stroke-width="1.5" stroke-linecap="round"/>
+
+          <!-- Flower 3 (Center Main Rose - Dusty Mauve Pink) -->
+          <circle cx="50" cy="34" r="14" fill="#f3a4b9"/>
+          <circle cx="50" cy="34" r="9.5" fill="#e57f9c"/>
+          <circle cx="50" cy="34" r="5.5" fill="#c95879"/>
+          <path d="M47 32C49 29 53 29 54 32C55 35 52 37 50 37" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" opacity="0.8"/>
+
+          <!-- Mini Baby's Breath / White Blossoms -->
+          <circle cx="48" cy="18" r="3" fill="#ffffff" stroke="#e5c5cf" stroke-width="0.8"/>
+          <circle cx="31" cy="28" r="2.8" fill="#ffffff" stroke="#e5c5cf" stroke-width="0.8"/>
+          <circle cx="69" cy="28" r="2.8" fill="#ffffff" stroke="#e5c5cf" stroke-width="0.8"/>
+        </svg>
+      </div>
+
+      <div class="subtitle-tag">
+        <span>A Quiet Conversation</span>
+      </div>
+
+      <h1 class="main-title">Mengeja Perjalanan Kita</h1>
+      <div class="recipient">Dear Flowee, Sayang 🤍</div>
+      
+      <div class="divider"></div>
+
+      <div class="letter-body">
+        <p>
+          Banyak hal yang sudah terlewati bersama belakangan ini—langkah-langkah yang menyenangkan, juga saat-saat yang mungkin terasa melelahkan.
+        </p>
+        <p>
+          Malam ini, ada keinginan untuk duduk berdua bersama sayang dalam suasana yang tenang. Bukan untuk mencari siapa yang benar atau salah, tapi untuk saling mendengar isi hati secara terbuka dan jujur.
+        </p>
+        <p>
+          Tentang hal-hal yang membuat hati ini tenang, hal yang perlu diperbaiki bersama, dan bagaimana langkah ke depan agar tetap beriringan dengan baik.
+        </p>
+      </div>
+
+      <div class="session-info">
+        <div class="info-item">
+          <span class="info-label">🌙 Waktu</span>
+          <span class="info-value">20.00 WIB s/d memeluk satu sama lain</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">🕯️ Suasana</span>
+          <span class="info-value">Tenang, jujur & dua arah</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">🌷 Fokus</span>
+          <span class="info-value">Evaluasi & saling mendengar</span>
+        </div>
+      </div>
+
+      <button class="btn-warm" id="acceptBtn" onclick="onAccept()">
+        <span>Mari duduk berdua dan bicara malam ini 🤍</span>
+      </button>
+
+      <div class="toast-msg" id="toastMsg">
+        Terima kasih untuk waktunya. Sampai bertemu nanti malam, sayang 🤍🌸
+      </div>
+
+      <div class="footer-note">
+        Tertulis tulus untuk Dear Flowee 🌷
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function onAccept() {
+      const btn = document.getElementById('acceptBtn');
+      const toast = document.getElementById('toastMsg');
+      
+      btn.innerHTML = '<span>Sampai bertemu nanti malam, sayang 🤍</span>';
+      btn.style.backgroundColor = '#6e5e64';
+      btn.style.cursor = 'default';
+      btn.disabled = true;
+      toast.classList.add('show');
+    }
+  </script>
+</body>
+</html>
